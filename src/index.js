@@ -16,29 +16,35 @@ function start() {
 
   const { configuration, errs } = getConfiguration(argv);
   const log = logger(configuration.debugMode);
-  log.info("Started HSS-analyser.");
+
+  log.info("Started HSS-analyser");
+  if (configuration.debugMode) {
+    log.info("Debug mode");
+  }
+  log.info("Polling interval : " + configuration.downloadInterval + " seconds");
+  log.info("Assets file : " + configuration.manifestsPath);
 
   for (let i = 0; i < errs.length; i++) {
     const err = errs[i];
     log.error(err.message);
     if (err.isFatal) {
-      log.error("HSS-analyse stopped.");
+      log.error("HSS-analyser stopped.");
       return;
     }
   }
 
   try {
     if (configuration.manifestsPath == null) {
-      log.error("No configuration provided.");
-      log.error("HSS-analyse stopped.");
+      log.error("No assets file provided.");
+      log.error("HSS-analyser stopped.");
       return;
     }
   
     const absolutePath = path.resolve(configuration.manifestsPath);
     fs.readFile(absolutePath, (err, data) => {
       if (err) {
-        log.error("Could not read file.");
-        log.error("HSS-analyse stopped.");
+        log.error("Could not read assets file.");
+        log.error("HSS-analyser stopped.");
         return;
       }
   
@@ -46,7 +52,7 @@ function start() {
       const { manifests } = parsedFile;
       if (manifests == null) {
         log.error("No 'manifests' key found in manifests file.");
-        log.error("HSS-analyse stopped.");
+        log.error("HSS-analyser stopped.");
         return;
       }
   
@@ -54,7 +60,7 @@ function start() {
     });
   } catch (err) {
     log.error("Undefined error: " + err.message || err);
-    log.error("HSS-analyse stopped.");
+    log.error("HSS-analyser stopped.");
     return;
   }
 }

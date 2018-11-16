@@ -44,13 +44,16 @@ function warnAboutDefects(manifestsInfos, log) {
  * @param {Object} log
  */
 export default function loadAndAnalyseManifests(manifests, configuration, log) {
-  const { downloadInterval } = configuration;
+  const { debugMode, downloadInterval } = configuration;
   try {
-    log.info(manifests.length + " manifest(s) " + ((manifests.length === 1) ? "was": "were") + " encountered.");
-    
+    log.info(manifests.length + " manifest(s) " + ((manifests.length === 1) ? "was": "were") + " found.");
+    log.info("Start polling.");
+
     function callback() {
-      log.separate();
-      log.info("Polling ...");
+      if (debugMode) {
+        console.log("\n---------------------------\n");
+      }
+      log.debug("Polling ...");
       const manifestPromises = manifests.map((url) => {
         return new Promise((resolve) => {
           loadManifest(url)
@@ -84,8 +87,8 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
       callback()
     }, downloadInterval * 1000)
   } catch(err) {
-    log.error("Could not parse manifests file.");
-    log.error("HSS-analyse stopped.");
+    log.error("Could not parse assets file.");
+    log.error("HSS-analyser stopped.");
     return;
   }
 }

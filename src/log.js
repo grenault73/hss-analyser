@@ -18,9 +18,6 @@ export default function log(debugMode) {
         console.debug('[%s] - \x1b[36m%s \x1b[33m%s %s\x1b[0m', date, "HSS-analyser: ", 'Debug -', message);
       }
     },
-    separate() {
-      console.log("\n---------------------------\n");
-    }
   }
 }
 
