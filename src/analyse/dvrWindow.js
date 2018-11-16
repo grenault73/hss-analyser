@@ -21,7 +21,7 @@ export default function getDvrDefectInfos(
         }, 0) / timescale; 
         const dvr = parseInt(DVRWindowLength, 10) / timescale;
         const diff = dvr - contentLength;
-        if (diff > gapTolerance || 2) {
+        if (diff > (gapTolerance != null ? gapTolerance : 2)) {
           acc.push({
             type,
             name,
