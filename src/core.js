@@ -50,7 +50,7 @@ function warnAboutDefects(manifestsInfos, log) {
  * @param {Object} log
  */
 export default function loadAndAnalyseManifests(manifests, configuration, log) {
-  const { debugMode, downloadInterval } = configuration;
+  const { downloadInterval } = configuration;
   try {
     log.info(manifests.length + " manifest(s) " + ((manifests.length === 1) ? "was": "were") + " found.");
     log.info("Start polling.");
@@ -100,7 +100,8 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
                 return manifestInformations;
               }
               try {
-                const { defectInfos } = analyseManifest(SmoothStreamingMedia);
+                const { gapTolerance } = configuration;
+                const { defectInfos } = analyseManifest(SmoothStreamingMedia, gapTolerance);
                 manifestInformations.defectInfos = defectInfos;
                 return manifestInformations;
               } catch(err) {

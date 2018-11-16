@@ -1,4 +1,6 @@
-export default function getDvrDefectInfos(streamIndex, DVRWindowLength, headerTimescale) {
+export default function getDvrDefectInfos(
+  streamIndex, DVRWindowLength, headerTimescale, gapTolerance
+) {
   return streamIndex.reduce((acc, index) => {
     const { $: indexAttributes, c } = index;
 
@@ -17,7 +19,7 @@ export default function getDvrDefectInfos(streamIndex, DVRWindowLength, headerTi
         }, 0) / timescale; 
         const dvr = parseInt(DVRWindowLength, 10) / timescale;
         const diff = dvr - contentLength;
-        if (diff > 2) {
+        if (diff > gapTolerance || 2) {
           acc.push({
             type,
             dvrWindowLength: dvr,

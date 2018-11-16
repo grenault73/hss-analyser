@@ -21,8 +21,9 @@ function start() {
   if (configuration.debugMode) {
     log.info("Debug mode");
   }
-  log.info("Polling interval : " + configuration.downloadInterval + " seconds");
   log.info("Assets file : " + configuration.manifestsPath);
+  log.info("Polling interval : " + configuration.downloadInterval + " seconds");
+  log.info("DVR gap tolerance : " + configuration.gapTolerance + " seconds");
 
   for (let i = 0; i < errs.length; i++) {
     const err = errs[i];

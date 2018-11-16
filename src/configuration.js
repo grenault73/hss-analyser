@@ -8,6 +8,7 @@ export default function getConfiguration(nodeArguments) {
     debugMode: false,
     downloadInterval: 5 * 60,
     manifestsPath: undefined,
+    gapTolerance: 2
   };
 
   const errs = [];
@@ -45,6 +46,32 @@ export default function getConfiguration(nodeArguments) {
           } catch (err) {
             errs.push({
               message: "Could not parse download interval. Default is 5 minutes.",
+              isFatal: false,
+            });
+          }
+        }
+        break;
+      case "-t":
+        if (!nodeArguments[i + 1]) {
+          errs.push({
+            message: "Should specify a gap tolerance when using '-t' option. " +
+              "Default gap tolerance is 2 seconds.",
+            isFatal: false,
+          })
+        } else {
+          try {
+            const parsedGap = parseInt(nodeArguments[i + 1], 10);
+            if (isNaN(parsedGap)) {
+              errs.push({
+                message: "Could not parse gap tolerance. Default is 2 seconds.",
+                isFatal: false,
+              });
+            } else {
+              configuration.gapTolerance = parsedGap;
+            }
+          } catch (err) {
+            errs.push({
+              message: "Could not parse gap tolerance. Default is 2 seconds.",
               isFatal: false,
             });
           }

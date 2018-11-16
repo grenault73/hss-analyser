@@ -5,7 +5,7 @@ import getDvrDefectInfos from "./dvrWindow";
  * Get defect infos.
  * @param {Object} SmoothStreamingMedia 
  */
-export default function analyseManifest(SmoothStreamingMedia) {
+export default function analyseManifest(SmoothStreamingMedia, gapTolerance) {
   if (!SmoothStreamingMedia || !SmoothStreamingMedia.StreamIndex) {
     throw new Error("No SmoothStreamingMedia or StreamIndex in manifest.");
   }
@@ -17,7 +17,10 @@ export default function analyseManifest(SmoothStreamingMedia) {
   return {
     defectInfos: {
       dvrDefectInfos: getDvrDefectInfos(
-        SmoothStreamingMedia.StreamIndex, DVRWindowLength, TimeScale)
+        SmoothStreamingMedia.StreamIndex,
+        DVRWindowLength,
+        TimeScale,
+        gapTolerance)
     }
   };
 }
