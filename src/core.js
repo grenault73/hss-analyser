@@ -12,20 +12,22 @@ function warnAboutDefects(manifestsInfos, log) {
 
   manifestsInfos.forEach((manifestInfo) => {
     const { defectInfos } = manifestInfo;
-    const { dvrDefectInfos } = defectInfos;
-    dvrDefectInfos.forEach((dvrDefectInfo) => {
-      if (dvrDefectInfos.length !== 0) {
-        hasDefect = true;
-        log.error("Manifest has defect :\n" +
-          "   URL: " + manifestInfo.url + "\n" +
-          "   Loading date: " + manifestInfo.date + "\n" +
-          "   DVR Infos: \n" +
-          "     type: " + dvrDefectInfo.type + "\n" +
-          "     Missing time (seconds): " + dvrDefectInfo.missingTime + "\n" +
-          "     window length (seconds): " + dvrDefectInfo.dvrWindowLength + "\n" +
-          "     content length: (seconds): " + dvrDefectInfo.contentLength);
-      }
-    })
+    if (defectInfos) {
+      const { dvrDefectInfos } = defectInfos;
+      dvrDefectInfos.forEach((dvrDefectInfo) => {
+        if (dvrDefectInfos.length !== 0) {
+          hasDefect = true;
+          log.error("Manifest has defect :\n" +
+            "   URL: " + manifestInfo.url + "\n" +
+            "   Loading date: " + manifestInfo.date + "\n" +
+            "   DVR Infos: \n" +
+            "     type: " + dvrDefectInfo.type + "\n" +
+            "     Missing time (seconds): " + dvrDefectInfo.missingTime + "\n" +
+            "     window length (seconds): " + dvrDefectInfo.dvrWindowLength + "\n" +
+            "     content length: (seconds): " + dvrDefectInfo.contentLength);
+        }
+      });
+    }
     if (!!manifestInfo.err) {
       log.debug("Error while loading and/or parsing manifest :\n" +
         "   URL: " + manifestInfo.url + "\n" +
