@@ -1,0 +1,7 @@
+{
+  "manifests": [
+    "https://hss-m006-live-aka-canalplus.akamaized.net/live/disk/france3-hd/hddvr.isml/manifest?token={0}",
+    "https://hss-m002-live-aka-canalplus.akamaized.net/live/disk/france2-hd/hddvr.isml/manifest?token={0}",
+    "https://hss-m001-live-aka-canalplus.akamaized.net/live/disk/tf1-hd/hd.isml/manifest?token={0}"
+  ]
+}
