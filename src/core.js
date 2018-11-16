@@ -24,7 +24,7 @@ function warnAboutDefects(manifestsInfos, log) {
         "     content length: (seconds): " + dvrDefectInfos.contentLength);
     }
     if (!!manifestInfo.err) {
-      log.debug("Encountered one error for manifest:\n" +
+      log.debug("Error while loading and/or parsing manifest :\n" +
         "   URL: " + manifestInfo.url + "\n" +
         "   Error: " + manifestInfo.err);
     }
@@ -66,12 +66,14 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
           return loadManifest(url)
             .then((SmoothStreamingMedia) => {
               loadedCount++;
-              log.incrementalDebug("Loaded [" + (loadedCount + 1) + "/" + manifests.length + "]", ((loadedCount + 1) === manifests.length));
+              log.incrementalDebug("Loading manifests ... [" + loadedCount + "/" + manifests.length + "]", (loadedCount === manifests.length));
               return {
                 url,
                 SmoothStreamingMedia
               };
             }).catch((err) => {
+              loadedCount++;
+              log.incrementalDebug("Loading manifests ... [" + loadedCount + "/" + manifests.length + "]", (loadedCount === manifests.length));
               return {
                 err: err.message || err
               };
