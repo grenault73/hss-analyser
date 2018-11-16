@@ -35,6 +35,6 @@ The analyser returns:
 
 ``-i`` : _(optionnal)_ Polling interval (in seconds) (default is 10 minutes).
 
-``-t`` : _(optionnal)_ DVR gap tolerance (in seconds) (default is 2 seconds).
+``-t`` : _(optionnal)_ DVR gap tolerance (in seconds) (default is 2 seconds). Not inclusive.
 
 ``--debug | -d`` : _(optionnal)_ Show debug logs.
