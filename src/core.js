@@ -49,43 +49,59 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
     log.info(manifests.length + " manifest(s) " + ((manifests.length === 1) ? "was": "were") + " found.");
     log.info("Start polling.");
 
-    function callback() {
-      if (debugMode) {
-        console.log("\n---------------------------\n");
-      }
-      log.debug("Polling ...");
-      const manifestPromises = manifests.map((url) => {
-        return new Promise((resolve) => {
-          loadManifest(url)
-            .then((SmoothStreamingMedia) => {
-              const manifestInformations = { url };
-              try {
-                const { defectInfos } = analyseManifest(SmoothStreamingMedia);
-                manifestInformations.defectInfos = defectInfos;
-                resolve(manifestInformations);
-              } catch(err) {
-                manifestInformations.err = err.message || err;
-                resolve(manifestInformations);
-              }
-            })
-            .catch((err) => {
-              resolve({
-                url,
-                err: err.message ? err.message : err
-              });
-            });
-        });
-      });
-
-      Promise.all(manifestPromises).then((manifestsInfos) => {
-        warnAboutDefects(manifestsInfos, log);
+    function callbackWithInterval(_callback, pollingInterval) {
+      _callback().then(() => {
+        setTimeout(() => {
+          callbackWithInterval(_callback, pollingInterval);
+        }, pollingInterval);
       });
     }
 
-    callback();
-    setInterval(() => {
-      callback()
-    }, downloadInterval * 1000)
+    let loadedCount = 0;
+
+    function callback() {
+      return new Promise((resolve) => {
+        log.debug("Polling ...");
+        const loadedManifests = manifests.map((url) => {
+          return loadManifest(url)
+            .then((SmoothStreamingMedia) => {
+              loadedCount++;
+              log.incrementalDebug("Loaded [" + (loadedCount + 1) + "/" + manifests.length + "]", ((loadedCount + 1) === manifests.length));
+              return {
+                url,
+                SmoothStreamingMedia
+              };
+            }).catch((err) => {
+              return {
+                err: err.message || err
+              };
+            })
+        });
+
+        return Promise.all(loadedManifests)
+          .then((SmoothStreamingMedias) => {
+            loadedCount = 0;
+            const manifestsInfos = SmoothStreamingMedias.map(({ SmoothStreamingMedia, url, err }) => {
+              const manifestInformations = { url, err };
+              if (err) {
+                return manifestInformations;
+              }
+              try {
+                const { defectInfos } = analyseManifest(SmoothStreamingMedia);
+                manifestInformations.defectInfos = defectInfos;
+                return manifestInformations;
+              } catch(err) {
+                manifestInformations.err = err.message || err;
+                return manifestInformations;
+              }
+            });
+            warnAboutDefects(manifestsInfos, log);
+            resolve();
+          });
+      });
+    }
+
+    callbackWithInterval(callback, downloadInterval * 1000);
   } catch(err) {
     log.error("Could not parse assets file.");
     log.error("HSS-analyser stopped.");

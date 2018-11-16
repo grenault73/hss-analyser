@@ -1,3 +1,5 @@
+
+
 /**
  * Returns log functions.
  * @param {boolean} debugMode 
@@ -6,18 +8,30 @@ export default function log(debugMode) {
   return {
     error(message) {
       const date = new Date();
-      console.error('[%s] - \x1b[36m%s \x1b[31m%s %s\x1b[0m', date, "HSS-analyser: ", 'Error -', message);
+      process.stdout.write('[' + date + '] - \x1b[36mHSS-analyser: \x1b[31mError - '
+        + message + '\x1b[0m\n');
     },
     info(message) {
       const date = new Date();
-      console.log('[%s] - \x1b[36m%s\x1b[0m %s\x1b[0m %s', date, "HSS-analyser: ", 'Info -', message);
+      process.stdout.write('[' + date + '] - \x1b[36mHSS-analyser: \x1b[0mInfo - '
+        + message + '\n');
     },
     debug(message) {
       if (debugMode) {
         const date = new Date();
-        console.debug('[%s] - \x1b[36m%s \x1b[33m%s %s\x1b[0m', date, "HSS-analyser: ", 'Debug -', message);
+        process.stdout.write('[' + date + '] - \x1b[36mHSS-analyser: \x1b[33mDebug - '
+          + message + '\x1b[0m\n');
       }
     },
+    incrementalDebug(message, jump) {
+      if (debugMode) {
+        const date = new Date();
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        process.stdout.write('[' + date + '] - \x1b[36mHSS-analyser: \x1b[33mDebug - '
+          + message + '\x1b[0m' + (jump ? '\n' : ''));
+      }
+    }
   }
 }
 
