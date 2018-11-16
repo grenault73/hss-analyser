@@ -12,20 +12,24 @@ function warnAboutDefects(manifestsInfos, log) {
 
   manifestsInfos.forEach((manifestInfo) => {
     const { defectInfos } = manifestInfo;
-    if (defectInfos != null && defectInfos.dvrDefectInfos != null) {
-      const { dvrDefectInfos } = defectInfos;
-      hasDefect = true;
-      log.error("Manifest has defect :\n" +
-        "   URL: " + manifestInfo.url + "\n" +
-        "   DVR Infos: \n" +
-        "     type: " + dvrDefectInfos.type + "\n" +
-        "     Missing time (seconds): " + dvrDefectInfos.missingTime + "\n" +
-        "     window length (seconds): " + dvrDefectInfos.dvrWindowLength + "\n" +
-        "     content length: (seconds): " + dvrDefectInfos.contentLength);
-    }
+    const { dvrDefectInfos } = defectInfos;
+    dvrDefectInfos.forEach((dvrDefectInfo) => {
+      if (dvrDefectInfos.length !== 0) {
+        hasDefect = true;
+        log.error("Manifest has defect :\n" +
+          "   URL: " + manifestInfo.url + "\n" +
+          "   Loading date: " + manifestInfo.date + "\n" +
+          "   DVR Infos: \n" +
+          "     type: " + dvrDefectInfo.type + "\n" +
+          "     Missing time (seconds): " + dvrDefectInfo.missingTime + "\n" +
+          "     window length (seconds): " + dvrDefectInfo.dvrWindowLength + "\n" +
+          "     content length: (seconds): " + dvrDefectInfo.contentLength);
+      }
+    })
     if (!!manifestInfo.err) {
       log.debug("Error while loading and/or parsing manifest :\n" +
         "   URL: " + manifestInfo.url + "\n" +
+        "   Loading date: " + manifestInfo.date + "\n" +
         "   Error: " + manifestInfo.err);
     }
   });
@@ -67,15 +71,20 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
             .then((SmoothStreamingMedia) => {
               loadedCount++;
               log.incrementalDebug("Loading manifests ... [" + loadedCount + "/" + manifests.length + "]", (loadedCount === manifests.length));
+              const date = new Date();
               return {
                 url,
-                SmoothStreamingMedia
+                SmoothStreamingMedia,
+                date
               };
             }).catch((err) => {
               loadedCount++;
               log.incrementalDebug("Loading manifests ... [" + loadedCount + "/" + manifests.length + "]", (loadedCount === manifests.length));
+              const date = new Date();
               return {
-                err: err.message || err
+                url,
+                err: err.message || err,
+                date
               };
             })
         });
@@ -83,8 +92,8 @@ export default function loadAndAnalyseManifests(manifests, configuration, log) {
         return Promise.all(loadedManifests)
           .then((SmoothStreamingMedias) => {
             loadedCount = 0;
-            const manifestsInfos = SmoothStreamingMedias.map(({ SmoothStreamingMedia, url, err }) => {
-              const manifestInformations = { url, err };
+            const manifestsInfos = SmoothStreamingMedias.map(({ SmoothStreamingMedia, url, err, date }) => {
+              const manifestInformations = { url, err, date };
               if (err) {
                 return manifestInformations;
               }

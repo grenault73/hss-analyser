@@ -7,7 +7,7 @@ export default function getDvrDefectInfos(streamIndex, DVRWindowLength, headerTi
       (indexAttributes.TimeScale || headerTimescale) : headerTimescale;
 
     if (type === "video" || type === "audio") {
-      if (c && acc == null) {
+      if (c) {
         const contentLength = c.reduce((length, { $: value }) => {
           const { d, r } = value;
           const _d = d ? parseInt(d, 10) : undefined;
@@ -18,15 +18,16 @@ export default function getDvrDefectInfos(streamIndex, DVRWindowLength, headerTi
         const dvr = parseInt(DVRWindowLength, 10) / timescale;
         const diff = dvr - contentLength;
         if (diff > 2) {
-          acc = {
+          acc.push({
+            type,
             dvrWindowLength: dvr,
             contentLength,
             missingTime: diff,
             type
-          };
+          });
         }
       }
     }
     return acc;
-  }, undefined);
+  }, []);
 }
