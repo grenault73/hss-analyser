@@ -27,7 +27,7 @@ The asset file lists manifest URL :
 
 The analyser returns:
 - The informations about defectuous manifests (url, defect infos).
-- The errors about manifest loading / parsing / analyse (if in verbose mode).
+- The errors about manifest loading / parsing / analyse (if in debug mode).
 
 ## Options
 
