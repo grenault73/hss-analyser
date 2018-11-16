@@ -5,6 +5,8 @@ export default function getDvrDefectInfos(
     const { $: indexAttributes, c } = index;
 
     const type = indexAttributes ? indexAttributes.Type : undefined;
+    const name = indexAttributes ? indexAttributes.Name : undefined;
+
     const timescale = indexAttributes ?
       (indexAttributes.TimeScale || headerTimescale) : headerTimescale;
 
@@ -22,6 +24,7 @@ export default function getDvrDefectInfos(
         if (diff > gapTolerance || 2) {
           acc.push({
             type,
+            name,
             dvrWindowLength: dvr,
             contentLength,
             missingTime: diff,

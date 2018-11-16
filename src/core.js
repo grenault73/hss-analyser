@@ -22,6 +22,7 @@ function warnAboutDefects(manifestsInfos, log) {
             "   Loading date: " + manifestInfo.date + "\n" +
             "   DVR Infos: \n" +
             "     type: " + dvrDefectInfo.type + "\n" +
+            "     name: " + dvrDefectInfo.name + "\n" +
             "     Missing time (seconds): " + dvrDefectInfo.missingTime + "\n" +
             "     window length (seconds): " + dvrDefectInfo.dvrWindowLength + "\n" +
             "     content length: (seconds): " + dvrDefectInfo.contentLength);
