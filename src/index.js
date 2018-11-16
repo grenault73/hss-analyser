@@ -48,15 +48,21 @@ function start() {
         return;
       }
   
-      const parsedFile = JSON.parse(data);
-      const { manifests } = parsedFile;
-      if (manifests == null) {
-        log.error("No 'manifests' key found in manifests file.");
+      try {
+        const parsedFile = JSON.parse(data);
+        const { manifests } = parsedFile;
+        if (manifests == null) {
+          log.error("No 'manifests' key found in manifests file.");
+          log.error("HSS-analyser stopped.");
+          return;
+        }
+    
+        loadAndAnalyseManifests(manifests, configuration, log);
+      } catch (err) {
+        log.error("JSON is not correclty formatted.");
         log.error("HSS-analyser stopped.");
         return;
       }
-  
-      loadAndAnalyseManifests(manifests, configuration, log);
     });
   } catch (err) {
     log.error("Undefined error: " + err.message || err);
