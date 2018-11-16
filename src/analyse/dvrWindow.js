@@ -17,7 +17,7 @@ export default function getDvrDefectInfos(streamIndex, DVRWindowLength, headerTi
         }, 0) / timescale; 
         const dvr = parseInt(DVRWindowLength, 10) / timescale;
         const diff = dvr - contentLength;
-        if (diff > 0) {
+        if (diff > 2) {
           acc = {
             dvrWindowLength: dvr,
             contentLength,
