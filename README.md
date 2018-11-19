@@ -1,5 +1,7 @@
 # HSS-analyser
 
+v1.0.0
+
 The aim of the application is to detect defects in HSS manifests. Here are the analysed manifest attributes:
 
 - DVR defect: In live cases, a DVR window length should be defined in the manifest.
