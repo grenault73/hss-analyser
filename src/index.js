@@ -57,8 +57,15 @@ function start() {
           log.error("HSS-analyser stopped.");
           return;
         }
+
+        const filteredManifests = manifests.filter((m) => m.length);
+        if (!filteredManifests.length) {
+          log.error("No manifests provided in asset file.");
+          log.error("HSS-analyser stopped.");
+          return;
+        }
     
-        loadAndAnalyseManifests(manifests, configuration, log);
+        loadAndAnalyseManifests(filteredManifests, configuration, log);
       } catch (err) {
         log.error("JSON is not correclty formatted.");
         log.error("HSS-analyser stopped.");
