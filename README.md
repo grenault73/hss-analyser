@@ -39,4 +39,6 @@ The analyser returns:
 
 ``-t`` : _(optionnal)_ DVR gap tolerance (in seconds) (default is 2 seconds). Not inclusive.
 
+``--logToFile | -l`` : _(optionnal)_ Log to file (in ./logs folder).
+
 ``--debug | -d`` : _(optionnal)_ Show debug logs.

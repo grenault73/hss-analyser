@@ -15,7 +15,7 @@ function start() {
   const { argv } = process;
 
   const { configuration, errs } = getConfiguration(argv);
-  const log = logger(configuration.debugMode);
+  const log = logger(configuration.debugMode, configuration.logToFile);
 
   log.info("Started HSS-analyser");
   if (configuration.debugMode) {

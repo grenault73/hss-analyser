@@ -8,7 +8,8 @@ export default function getConfiguration(nodeArguments) {
     debugMode: false,
     downloadInterval: 5 * 60,
     manifestsPath: undefined,
-    gapTolerance: 2
+    gapTolerance: 2,
+    logToFile: false,
   };
 
   const errs = [];
@@ -80,6 +81,10 @@ export default function getConfiguration(nodeArguments) {
       case "-d":
       case "--debug":
         configuration.debugMode = true;
+        break;
+      case "-l":
+      case "--logToFile":
+        configuration.logToFile = true;
         break;
     }
   }
