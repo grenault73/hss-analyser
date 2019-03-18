@@ -1,0 +1,30 @@
+sudo: enabled
+dist: xenial
+
+language:
+  - node_js
+
+node_js:
+  - "8"
+
+# no need to keep large commit depth
+git:
+  depth: 1
+
+# exclusive
+branches: 
+  only:
+    - master
+
+cache:
+  directories:
+    - "node_modules"
+
+install:
+  - npm install
+
+build:
+  - npm run build
+
+script:
+  - npm run test
