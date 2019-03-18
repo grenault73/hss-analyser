@@ -1,5 +1,5 @@
-import https from "https";
-import http from "http";
+const https = require("https");
+const http = require("http");
 
 export default function fetchManifest(url) {
   return new Promise((resolve) => {

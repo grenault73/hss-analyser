@@ -10,7 +10,7 @@ export default function parseSmoothStreamingMedia(content) {
   return new Promise((resolve, reject) => {   
     parseXMLToJSObject(content, (err, { SmoothStreamingMedia }) => {
       if (err) {
-        reject(err)
+        reject(err);
       } else {
         resolve(SmoothStreamingMedia);
       }

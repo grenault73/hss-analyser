@@ -6,7 +6,7 @@ const fs = require("fs");
  * @param {string} log 
  * @returns {string}
  */
-function cleanLogFormatting(log) {
+export function cleanLogFormatting(log) {
   return log
     .replace("\x1b[36m", "")
     .replace("\x1b[0m", "")

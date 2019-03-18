@@ -1,13 +1,37 @@
 # HSS-analyser
 
-``v1.0.0``
+``v2.0.0``
 
-The aim of the application is to detect defects in HSS manifests. Here are the analysed manifest attributes:
+The aim of the application is to detect defects in HSS manifests.
 
-- DVR defect: In live cases, a DVR window length should be defined in the manifest.
-All segments present between last segment ending and the beginning of the DVR should be announced in the manifest.
-If the content is far shorter that the DVR window, the client may want to seek in the content were there are no
-available segments. The analyser tolerates a difference of 2 seconds between DVR and content length. 
+4 defects can be encountered in live situations:
+- The content start is far behind the DVR start.
+  - The client may want to access an announced segment which is actually not available, seeking in the content
+  in the early DVR window.
+  - _Default tolerated gap_ : 10 seconds.
+  - _Error name_ : `ODD_START_OF_CONTENT`.
+
+- The total content length seems suspiciously short compared to DVR window length.
+  - The content total length should be nearly equal to DVR window length.
+  - _Default tolerated gap_ : 10 seconds (can be modified with option -sst).
+  - _Error name_ : `ODD_TOTAL_DURATION`.
+
+- There are discountinuities in the content.
+  - The content is split into several parts. Client may seek in discountinuities.
+  - _Error name_ : `CONTENT_DISCOUNTINUITIES`.
+
+- The end of content is far in the past from manifest receive time.
+  - A live content's end may be close to manifest received time. Warn if not.
+  - _Default tolerated gap_ : 60 seconds.
+  - _Error name_ : `ODD_END_OF_CONTENT`.
+
+- The end of content is far in the past from manifest receive time.
+  - A live content's end may be close to manifest received time. Warn if not.
+  - _Default tolerated gap_ : 60 seconds.
+  - _Error name_ : `ODD_END_OF_CONTENT`.
+
+- There is no content in video or audio track.
+  - _Error name_ : `NO_CONTENT`.
 
 The analyser will poll manifests at a defined interval.
 
@@ -37,7 +61,7 @@ The analyser returns:
 
 ``-i`` : _(optionnal)_ Polling interval (in seconds) (default is 10 minutes).
 
-``-t`` : _(optionnal)_ DVR gap tolerance (in seconds) (default is 2 seconds). Not inclusive.
+``-sst`` : _(optionnal)_ "First segment start can be behind" tolerance (in seconds) (default is 10 seconds).
 
 ``--logToFile | -l`` : _(optionnal)_ Log to file (in ./logs folder).
 
