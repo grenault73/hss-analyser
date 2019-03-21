@@ -67,6 +67,17 @@ export default function getDvrDefectInfos(
         const presentationLiveGap = Date.now() / 1000 - (lastPosition + refTime);
         const dvrWindowStart = manifestReceivedTime - dvr - presentationLiveGap;
 
+        if (presentationLiveGap < 0) {
+          acc.push({
+            type,
+            name,
+            dvrWindowLength: dvr,
+            dvrWindowStart,
+            presentationLiveGap,
+            defectType: "LATE_CONTENT_END",
+          });
+        }
+
         if (presentationLiveGap >= 60) {
           acc.push({
             type,
@@ -74,7 +85,7 @@ export default function getDvrDefectInfos(
             dvrWindowLength: dvr,
             dvrWindowStart,
             presentationLiveGap,
-            defectType: "ODD_END_OF_CONTENT",
+            defectType: "EARLY_CONTENT_END",
           });
         }
 
@@ -85,7 +96,7 @@ export default function getDvrDefectInfos(
             dvrWindowLength: dvr,
             dvrWindowStart,
             firstPosition: firstPosition + refTime,
-            defectType: "ODD_START_OF_CONTENT",
+            defectType: "LATE_CONTENT_START",
           });
         }
 
@@ -109,7 +120,7 @@ export default function getDvrDefectInfos(
             name,
             dvrWindowLength: dvr,
             totalDuration,
-            defectType: "ODD_TOTAL_DURATION",
+            defectType: "CONTENT_TOO_LONG",
           });
         }
       }

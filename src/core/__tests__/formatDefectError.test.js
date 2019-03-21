@@ -1,9 +1,9 @@
 import formatDefectError from "../formatDefectError";
 
 describe("core - formatDefectError", () => {
-  it("should return ODD_START_OF_CONTENT formatted message", () => {
+  it("should return LATE_CONTENT_START formatted message", () => {
     expect(formatDefectError({
-      defectType: "ODD_START_OF_CONTENT",
+      defectType: "LATE_CONTENT_START",
       dvrWindowStart: 3,
       firstPosition: 15,
     })).toBe(
@@ -11,9 +11,9 @@ describe("core - formatDefectError", () => {
       "     First content position: 15\n"
     );
   });
-  it("should return ODD_END_OF_CONTENT formatted message", () => {
+  it("should return EARLY_CONTENT_END formatted message", () => {
     expect(formatDefectError({
-      defectType: "ODD_END_OF_CONTENT",
+      defectType: "EARLY_CONTENT_END",
       dvrWindowStart: 3,
       presentationLiveGap: 15,
     })).toBe(
@@ -29,9 +29,9 @@ describe("core - formatDefectError", () => {
       "     Ranges: 3\n"
     );
   });
-  it("should return ODD_TOTAL_DURATION formatted message", () => {
+  it("should return CONTENT_TOO_LONG formatted message", () => {
     expect(formatDefectError({
-      defectType: "ODD_TOTAL_DURATION",
+      defectType: "CONTENT_TOO_LONG",
       totalDuration: 3
     })).toBe(
       "     Total content duration: 3\n"

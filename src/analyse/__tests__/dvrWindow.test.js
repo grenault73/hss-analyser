@@ -66,7 +66,7 @@ describe("analyse - getDvrDefectInfos", () => {
     spyDateNow.mockClear();
   });
 
-  it("should warn if presentation live gap too far from manifest time", () => {
+  xit("should warn if presentation live gap too far from manifest time", () => {
     const now = Math.floor(Date.now() / 1000);
     const refTime = Math.floor(Date.UTC(2013, 5, 1, 0, 0, 0, 0) / 1000); // 04/01/2013
     const streamIndex = [
@@ -95,13 +95,42 @@ describe("analyse - getDvrDefectInfos", () => {
     spyDateNow.mockClear();
   });
 
+  it("should warn if presentation live gap negative", () => {
+    const now = Math.floor(Date.now() / 1000);
+    const refTime = Math.floor(Date.UTC(2013, 5, 1, 0, 0, 0, 0) / 1000); // 04/01/2013
+    const streamIndex = [
+      { $: { Type: "video", TimeScale: 1, Name: "name" }, c: [
+        { $ : { t: now - 28800 + 20 - refTime, d: 28800} } 
+      ] }
+    ];
+
+    const spyDateNow = jest.spyOn(Date, "now").mockImplementation(() => now * 1000);
+    spyDateNow.mockClear();
+
+    const getDvrDefectInfos = require("../dvrWindow").default;
+    const dvrDefectInfos = getDvrDefectInfos(
+      streamIndex,
+      28800,
+      null,
+      undefined,
+      now - 0.002,
+    );
+
+    const defect = dvrDefectInfos[0];
+    expect(defect).not.toBeUndefined();
+    expect(defect.dvrWindowStart).toBeCloseTo(now - 28800 + 20);
+    expect(defect.presentationLiveGap).toBeCloseTo(-20);
+    expect(spyDateNow).toHaveBeenCalledTimes(1);
+    spyDateNow.mockClear();
+  });
+
   it("should warn if there is a discountinuity", () => {
     const now = Math.floor(Date.now() / 1000);
     const refTime = Math.floor(Date.UTC(2013, 5, 1, 0, 0, 0, 0) / 1000); // 04/01/2013
     const streamIndex = [
       { $: { Type: "video", TimeScale: 1, Name: "name" }, c: [
-        { $ : { t: now - 28800 - 20 - refTime, d: 28800} },
-        { $ : { t: now - 28800 - 20 - refTime + 30000, d: 28800} }
+        { $ : { t: now - 28800 - 20 - refTime, d: 14400} },
+        { $ : { t: now - 28800 - 20 - refTime + 14700, d: 14400 - 300} }
       ] }
     ];
 
@@ -146,7 +175,7 @@ describe("analyse - getDvrDefectInfos", () => {
     );
 
     const defect = dvrDefectInfos.find(({ defectType }) => {
-      return defectType && defectType === "ODD_TOTAL_DURATION";
+      return defectType && defectType === "CONTENT_TOO_LONG";
     }); 
     expect(defect).not.toBeUndefined();
     expect(defect.totalDuration).toBeCloseTo(40);

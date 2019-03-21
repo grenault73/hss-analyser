@@ -5,12 +5,12 @@
  */
 export default function formatDefectError(dvrDefectInfo) {
   switch(dvrDefectInfo.defectType) {
-    case "ODD_START_OF_CONTENT":
+    case "LATE_CONTENT_START":
       return (
         "     DVR Window start: " + dvrDefectInfo.dvrWindowStart + "\n" +
         "     First content position: " + dvrDefectInfo.firstPosition + "\n"
       );
-    case "ODD_END_OF_CONTENT":
+    case "EARLY_CONTENT_END":
       return (
         "     DVR Window start: " + dvrDefectInfo.dvrWindowStart + "\n" +
         "     Presentation live gap: " + dvrDefectInfo.presentationLiveGap + "\n"
@@ -19,9 +19,14 @@ export default function formatDefectError(dvrDefectInfo) {
       return (
         "     Ranges: " + dvrDefectInfo.rangeLength + "\n"
       );
-    case "ODD_TOTAL_DURATION":
+    case "CONTENT_TOO_LONG":
       return (
         "     Total content duration: " + dvrDefectInfo.totalDuration + "\n"
+      );
+    case "LATE_CONTENT_END":
+      return (
+        "     DVR Window start: " + dvrDefectInfo.dvrWindowStart + "\n" +
+        "     Presentation live gap: " + dvrDefectInfo.presentationLiveGap + "\n"
       );
     default:
       return "";

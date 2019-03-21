@@ -1,5 +1,7 @@
 {
   "manifests": [
-    ""
+    "https://hss-m003.p-cdnlive-edge010110.scy.canalplus-cdn.net/ora-7086ade63c72e231f21e5757af1655b5-e718/live/disk/canalplus-hd/hddvr.isml/manifest?token={0}",
+    "https://hss-m001-live-aka-canalplus.akamaized.net/live/disk/tf1-hd/hddvr.isml/manifest?token={0}",
+    "https://hss-m006-live-aka-canalplus.akamaized.net/live/disk/arte-hd/hddvr.isml/manifest?token={0}"
   ]
 }
