@@ -8,7 +8,8 @@ export default function getConfiguration(nodeArguments) {
     debugMode: false,
     downloadInterval: 5 * 60,
     manifestsPath: undefined,
-    gapTolerance: 2
+    firstPositionCanBeBehind: 10,
+    logToFile: false,
   };
 
   const errs = [];
@@ -51,7 +52,7 @@ export default function getConfiguration(nodeArguments) {
           }
         }
         break;
-      case "-t":
+      case "-sst":
         if (!nodeArguments[i + 1]) {
           errs.push({
             message: "Should specify a gap tolerance when using '-t' option. " +
@@ -67,7 +68,7 @@ export default function getConfiguration(nodeArguments) {
                 isFatal: false,
               });
             } else {
-              configuration.gapTolerance = parsedGap;
+              configuration.firstPositionCanBeBehind = parsedGap;
             }
           } catch (err) {
             errs.push({
@@ -80,6 +81,10 @@ export default function getConfiguration(nodeArguments) {
       case "-d":
       case "--debug":
         configuration.debugMode = true;
+        break;
+      case "-l":
+      case "--logToFile":
+        configuration.logToFile = true;
         break;
     }
   }
